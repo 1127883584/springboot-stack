@@ -178,4 +178,62 @@ public class CompanyControllerTest {
                         "    \"employees\": []\n" +
                         "}"));
     }
+
+    @Test
+    public void should_return_the_companies_when_delete_company_by_id() throws Exception {
+        mockCompanyRepository = Mockito.mock(CompanyRepository.class);
+        List<Company> mockCompanyList = new ArrayList<>();
+        mockCompanyList.add(new Company(1,"alibaba", 200, new EmployeeRepository().getEmployees()));
+        mockCompanyList.add(new Company(2,"baidu", 500, new EmployeeRepository().getEmployees()));
+        mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
+        Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
+
+        mockMvc.perform(delete("/company/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[\n" +
+                        "    {\n" +
+                        "        \"id\": 1,\n" +
+                        "        \"companyName\": \"alibaba\",\n" +
+                        "        \"employeesNumber\": 200,\n" +
+                        "        \"employees\": [\n" +
+                        "            {\n" +
+                        "                \"id\": 1,\n" +
+                        "                \"name\": \"zhangsan\",\n" +
+                        "                \"age\": 18,\n" +
+                        "                \"gender\": \"male\",\n" +
+                        "                \"salary\": 5000\n" +
+                        "            },\n" +
+                        "            {\n" +
+                        "                \"id\": 2,\n" +
+                        "                \"name\": \"lisi\",\n" +
+                        "                \"age\": 25,\n" +
+                        "                \"gender\": \"female\",\n" +
+                        "                \"salary\": 7000\n" +
+                        "            }\n" +
+                        "        ]\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"id\": 3,\n" +
+                        "        \"companyName\": \"wangyiyun\",\n" +
+                        "        \"employeesNumber\": 100,\n" +
+                        "        \"employees\": [\n" +
+                        "            {\n" +
+                        "                \"id\": 1,\n" +
+                        "                \"name\": \"zhangsan\",\n" +
+                        "                \"age\": 18,\n" +
+                        "                \"gender\": \"male\",\n" +
+                        "                \"salary\": 5000\n" +
+                        "            },\n" +
+                        "            {\n" +
+                        "                \"id\": 2,\n" +
+                        "                \"name\": \"lisi\",\n" +
+                        "                \"age\": 25,\n" +
+                        "                \"gender\": \"female\",\n" +
+                        "                \"salary\": 7000\n" +
+                        "            }\n" +
+                        "        ]\n" +
+                        "    }\n" +
+                        "]"));
+    }
 }

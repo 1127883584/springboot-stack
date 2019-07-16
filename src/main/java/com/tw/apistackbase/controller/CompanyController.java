@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 @RestController
 public class CompanyController {
     @Autowired
@@ -61,5 +65,12 @@ public class CompanyController {
         return ResponseEntity.ok(updateCompany);
     }
 
+    @DeleteMapping("/company/{id}")
+    public ResponseEntity deleteCompany(@PathVariable int id){
+        List<Company> afterDeleteCompanies = companyRepository.getCompanies().stream()
+                .filter(element -> element.getId() != id)
+                .collect(Collectors.toList());
 
+        return ResponseEntity.ok(afterDeleteCompanies);
+    }
 }
