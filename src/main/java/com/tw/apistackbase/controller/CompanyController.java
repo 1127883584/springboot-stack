@@ -18,7 +18,12 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    public ResponseEntity getCompanies() {
+    public ResponseEntity getCompanies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "0") int pageSize) {
+        if (page > 0 && pageSize > 0) {
+            return ResponseEntity.ok(companyRepository.getCompanies().subList(0, page * pageSize));
+        }
         return ResponseEntity.ok(companyRepository.getCompanies());
     }
 
@@ -39,4 +44,5 @@ public class CompanyController {
                 .orElse(null);
         return ResponseEntity.ok(company.getEmployees());
     }
+
 }
