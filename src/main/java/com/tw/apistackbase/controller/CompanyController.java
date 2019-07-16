@@ -4,10 +4,7 @@ import com.tw.apistackbase.Company;
 import com.tw.apistackbase.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CompanyController {
@@ -23,5 +20,14 @@ public class CompanyController {
     @GetMapping("/companies")
     public ResponseEntity getCompanies() {
         return ResponseEntity.ok(companyRepository.getCompanies());
+    }
+
+    @GetMapping("/company/{id}")
+    public ResponseEntity getCompanyById(@PathVariable int id) {
+        Company company = companyRepository.getCompanies().stream()
+                .filter(element -> element.getId() == id)
+                .findFirst()
+                .orElse(null);
+        return ResponseEntity.ok(company);
     }
 }
