@@ -49,4 +49,17 @@ public class CompanyController {
         return ResponseEntity.ok(company.getEmployees());
     }
 
+    @PutMapping("/company/{id}")
+    public ResponseEntity updateCompany(@PathVariable int id, @RequestBody Company company){
+        Company updateCompany = companyRepository.getCompanies().stream()
+                .filter(element -> element.getId() == id)
+                .findFirst()
+                .orElse(null);
+
+        BeanUtils.copyProperties(company, updateCompany);
+        updateCompany.setId(id);
+        return ResponseEntity.ok(updateCompany);
+    }
+
+
 }

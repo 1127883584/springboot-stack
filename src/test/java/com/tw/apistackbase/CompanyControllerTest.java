@@ -15,8 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -154,4 +153,29 @@ public class CompanyControllerTest {
                         "}"));
     }
 
+    @Test
+    public void should_return_the_update_company_when_update_company_by_id() throws Exception {
+        mockCompanyRepository = Mockito.mock(CompanyRepository.class);
+        List<Company> mockCompanyList = new ArrayList<>();
+        mockCompanyList.add(new Company(1,"alibaba", 200, new EmployeeRepository().getEmployees()));
+        mockCompanyList.add(new Company(2,"baidu", 500, new EmployeeRepository().getEmployees()));
+        mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
+        Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
+
+        mockMvc.perform(put("/company/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\n" +
+                        "\t\"companyName\": \"kugou\",\n" +
+                        "\t\"employeesNumber\": 800,\n" +
+                        "\t\"employees\": []\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\n" +
+                        "    \"id\": 1,\n" +
+                        "    \"companyName\": \"kugou\",\n" +
+                        "    \"employeesNumber\": 800,\n" +
+                        "    \"employees\": []\n" +
+                        "}"));
+    }
 }
