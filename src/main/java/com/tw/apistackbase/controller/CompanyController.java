@@ -30,4 +30,13 @@ public class CompanyController {
                 .orElse(null);
         return ResponseEntity.ok(company);
     }
+
+    @GetMapping("/company/{id}/employees")
+    public ResponseEntity getEmployeesByCompanyId(@PathVariable int id) {
+        Company company = companyRepository.getCompanies().stream()
+                .filter(element -> element.getId() == id)
+                .findFirst()
+                .orElse(null);
+        return ResponseEntity.ok(company.getEmployees());
+    }
 }
