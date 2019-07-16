@@ -15,6 +15,14 @@ public class Company {
         this.employees = employees;
     }
 
+    public Company(String companyName, int employeesNumber) {
+        this.companyName = companyName;
+        this.employeesNumber = employeesNumber;
+        this.employees = employees;
+    }
+
+    public Company() {}
+
     public int getId() {
         return id;
     }

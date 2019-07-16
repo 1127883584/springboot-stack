@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -135,53 +137,21 @@ public class CompanyControllerTest {
         mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
         Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
 
-        mockMvc.perform(get("/companies?page=1&pageSize=2"))
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\n" +
+                        "\t\"companyName\": \"kugou\",\n" +
+                        "\t\"employeesNumber\": 180,\n" +
+                        "\t\"employees\": []\n" +
+                        "}"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("[\n" +
-                        "    {\n" +
-                        "        \"id\": 1,\n" +
-                        "        \"companyName\": \"alibaba\",\n" +
-                        "        \"employeesNumber\": 200,\n" +
-                        "        \"employees\": [\n" +
-                        "            {\n" +
-                        "                \"id\": 1,\n" +
-                        "                \"name\": \"zhangsan\",\n" +
-                        "                \"age\": 18,\n" +
-                        "                \"gender\": \"male\",\n" +
-                        "                \"salary\": 5000\n" +
-                        "            },\n" +
-                        "            {\n" +
-                        "                \"id\": 2,\n" +
-                        "                \"name\": \"lisi\",\n" +
-                        "                \"age\": 25,\n" +
-                        "                \"gender\": \"female\",\n" +
-                        "                \"salary\": 7000\n" +
-                        "            }\n" +
-                        "        ]\n" +
-                        "    },\n" +
-                        "    {\n" +
-                        "        \"id\": 2,\n" +
-                        "        \"companyName\": \"baidu\",\n" +
-                        "        \"employeesNumber\": 500,\n" +
-                        "        \"employees\": [\n" +
-                        "            {\n" +
-                        "                \"id\": 1,\n" +
-                        "                \"name\": \"zhangsan\",\n" +
-                        "                \"age\": 18,\n" +
-                        "                \"gender\": \"male\",\n" +
-                        "                \"salary\": 5000\n" +
-                        "            },\n" +
-                        "            {\n" +
-                        "                \"id\": 2,\n" +
-                        "                \"name\": \"lisi\",\n" +
-                        "                \"age\": 25,\n" +
-                        "                \"gender\": \"female\",\n" +
-                        "                \"salary\": 7000\n" +
-                        "            }\n" +
-                        "        ]\n" +
-                        "    }\n" +
-                        "]"));
+                .andExpect(content().json("{\n" +
+                        "    \"id\": 4,\n" +
+                        "    \"companyName\": \"kugou\",\n" +
+                        "    \"employeesNumber\": 180,\n" +
+                        "    \"employees\": []\n" +
+                        "}"));
     }
 
 }
