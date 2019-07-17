@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class EmployeeController {
     @Autowired
@@ -14,9 +18,17 @@ public class EmployeeController {
     @GetMapping("/employees")
     public ResponseEntity getEmployees(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "0") int pageSize) {
+            @RequestParam(defaultValue = "0") int pageSize,
+            @RequestParam(defaultValue = "all") String gender) {
+        List<Employee> employees = employeeRepository.getEmployees();
         if (page > 0 && pageSize > 0) {
-            return ResponseEntity.ok(employeeRepository.getEmployees().subList(0, page * pageSize));
+            employees = employees.subList(0, page * pageSize);
+        }
+        if (!gender.equals("all")) {
+            employees = employeeRepository.getEmployees().stream()
+                    .filter(element -> element.getGender().equals(gender))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(employees);
         }
         return ResponseEntity.ok(employeeRepository.getEmployees());
     }

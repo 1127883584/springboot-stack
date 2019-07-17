@@ -79,4 +79,55 @@ public class EmployeesControllerTest {
                         "    \"salary\": 5000\n" +
                         "}"));
     }
+
+    @Test
+    public void should_return_companies_when_request_company_by_page_and_page_size() throws Exception {
+        mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(1, "zhangsan", 18, "male", 5000));
+        mockEmployeeList.add(new Employee(2, "lisi", 25, "female", 7000));
+        Mockito.when(mockEmployeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(get("/employees?page=1&pageSize=2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[\n" +
+                        "    {\n" +
+                        "        \"id\": 1,\n" +
+                        "        \"name\": \"zhangsan\",\n" +
+                        "        \"age\": 18,\n" +
+                        "        \"gender\": \"male\",\n" +
+                        "        \"salary\": 5000\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "        \"id\": 2,\n" +
+                        "        \"name\": \"lisi\",\n" +
+                        "        \"age\": 25,\n" +
+                        "        \"gender\": \"female\",\n" +
+                        "        \"salary\": 7000\n" +
+                        "    }\n" +
+                        "]"));
+    }
+
+    @Test
+    public void should_return_companies_when_request_company_by_gender() throws Exception {
+        mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(1, "zhangsan", 18, "male", 5000));
+        mockEmployeeList.add(new Employee(2, "lisi", 25, "female", 7000));
+        Mockito.when(mockEmployeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(get("/employees?gender=male"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[\n" +
+                        "    {\n" +
+                        "        \"id\": 1,\n" +
+                        "        \"name\": \"zhangsan\",\n" +
+                        "        \"age\": 18,\n" +
+                        "        \"gender\": \"male\",\n" +
+                        "        \"salary\": 5000\n" +
+                        "    }\n" +
+                        "]"));
+    }
 }
