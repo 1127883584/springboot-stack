@@ -119,7 +119,7 @@ public class CompanyControllerTest {
         mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
         Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
 
-        mockMvc.perform(get("/company/1/employees"))
+        mockMvc.perform(get("/companies/1/employees"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n" +
@@ -149,7 +149,7 @@ public class CompanyControllerTest {
         mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
         Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
 
-        mockMvc.perform(get("/company/1"))
+        mockMvc.perform(get("/companies/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
@@ -210,7 +210,7 @@ public class CompanyControllerTest {
         mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
         Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
 
-        mockMvc.perform(put("/company/1")
+        mockMvc.perform(put("/companies/1")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\n" +
                         "\t\"companyName\": \"kugou\",\n" +
@@ -236,7 +236,7 @@ public class CompanyControllerTest {
         mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
         Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
 
-        mockMvc.perform(delete("/company/2"))
+        mockMvc.perform(delete("/companies/2"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n" +

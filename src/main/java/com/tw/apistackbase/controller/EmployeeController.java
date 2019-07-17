@@ -20,4 +20,13 @@ public class EmployeeController {
         }
         return ResponseEntity.ok(employeeRepository.getEmployees());
     }
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity getEmployeeById(@PathVariable int id) {
+        Employee employee = employeeRepository.getEmployees().stream()
+                .filter(element -> element.getId() == id)
+                .findFirst()
+                .orElse(null);
+        return ResponseEntity.ok(employee);
+    }
 }

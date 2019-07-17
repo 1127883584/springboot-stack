@@ -35,7 +35,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyRepository.getCompanies());
     }
 
-    @GetMapping("/company/{id}")
+    @GetMapping("/companies/{id}")
     public ResponseEntity getCompanyById(@PathVariable int id) {
         Company company = companyRepository.getCompanies().stream()
                 .filter(element -> element.getId() == id)
@@ -44,7 +44,7 @@ public class CompanyController {
         return ResponseEntity.ok(company);
     }
 
-    @GetMapping("/company/{id}/employees")
+    @GetMapping("/companies/{id}/employees")
     public ResponseEntity getEmployeesByCompanyId(@PathVariable int id) {
         Company company = companyRepository.getCompanies().stream()
                 .filter(element -> element.getId() == id)
@@ -53,7 +53,7 @@ public class CompanyController {
         return ResponseEntity.ok(company.getEmployees());
     }
 
-    @PutMapping("/company/{id}")
+    @PutMapping("/companies/{id}")
     public ResponseEntity updateCompany(@PathVariable int id, @RequestBody Company company){
         Company updateCompany = companyRepository.getCompanies().stream()
                 .filter(element -> element.getId() == id)
@@ -65,7 +65,7 @@ public class CompanyController {
         return ResponseEntity.ok(updateCompany);
     }
 
-    @DeleteMapping("/company/{id}")
+    @DeleteMapping("/companies/{id}")
     public ResponseEntity deleteCompany(@PathVariable int id){
         List<Company> afterDeleteCompanies = companyRepository.getCompanies().stream()
                 .filter(element -> element.getId() != id)
