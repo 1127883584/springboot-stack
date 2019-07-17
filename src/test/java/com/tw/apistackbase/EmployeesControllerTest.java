@@ -2,6 +2,7 @@ package com.tw.apistackbase;
 
 import com.tw.apistackbase.controller.CompanyController;
 import com.tw.apistackbase.controller.EmployeeController;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -31,6 +32,11 @@ public class EmployeesControllerTest {
 
     private EmployeeController employeeController;
     private EmployeeRepository mockEmployeeRepository;
+
+    @Before
+    public void setUp() throws Exception{
+
+    }
 
     @Test
     public void should_return_employees_when_request_all_employee_api() throws Exception {
@@ -157,4 +163,32 @@ public class EmployeesControllerTest {
                         "    \"salary\": 3000\n" +
                         "}"));
     }
+
+    @Test
+    public void should_return_the_update_company_when_update_company_by_id() throws Exception {
+        mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(1, "zhangsan", 18, "male", 5000));
+        mockEmployeeList.add(new Employee(2, "lisi", 25, "female", 7000));
+        Mockito.when(mockEmployeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(put("/employees/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\n" +
+                        "    \"name\": \"xiaoming\",\n" +
+                        "    \"age\": 19,\n" +
+                        "    \"gender\": \"male\",\n" +
+                        "    \"salary\": 3000\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\n" +
+                        "    \"id\": 1,\n" +
+                        "    \"name\": \"xiaoming\",\n" +
+                        "    \"age\": 19,\n" +
+                        "    \"gender\": \"male\",\n" +
+                        "    \"salary\": 3000\n" +
+                        "}"));
+    }
+
 }

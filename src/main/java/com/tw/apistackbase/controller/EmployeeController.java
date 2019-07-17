@@ -44,11 +44,23 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity createCompany(@RequestBody Employee employee) {
+    public ResponseEntity createEmployee(@RequestBody Employee employee) {
         Employee employee1Temp = new Employee();
         BeanUtils.copyProperties(employee, employee1Temp);
         employee1Temp.setId(employeeRepository.getEmployees().size() + 1);
         employeeRepository.getEmployees().add(employee1Temp);
         return ResponseEntity.ok(employee1Temp);
+    }
+
+    @PutMapping("/employees/{id}")
+    public ResponseEntity updateEmployee(@PathVariable int id, @RequestBody Employee employee){
+        Employee updateEmployee = employeeRepository.getEmployees().stream()
+                .filter(element -> element.getId() == id)
+                .findFirst()
+                .orElse(null);
+
+        BeanUtils.copyProperties(employee, updateEmployee);
+        updateEmployee.setId(id);
+        return ResponseEntity.ok(updateEmployee);
     }
 }
