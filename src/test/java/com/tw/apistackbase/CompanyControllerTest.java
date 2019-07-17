@@ -1,6 +1,5 @@
 package com.tw.apistackbase;
 
-import com.tw.apistackbase.controller.CompanyController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -28,8 +27,7 @@ public class CompanyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private CompanyController companyController;
-
+    @Autowired
     private CompanyRepository mockCompanyRepository;
 
     @Test
@@ -254,6 +252,32 @@ public class CompanyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "    \"id\": 1,\n" +
+                        "    \"companyName\": \"kugou\",\n" +
+                        "    \"employeesNumber\": 800,\n" +
+                        "    \"employees\": []\n" +
+                        "}"));
+    }
+
+    @Test
+    public void should_return_the_add_company_when_call_add_company_api() throws Exception {
+        mockCompanyRepository = Mockito.mock(CompanyRepository.class);
+        List<Company> mockCompanyList = new ArrayList<>();
+        mockCompanyList.add(new Company(1,"alibaba", 200, new EmployeeRepository().getEmployees()));
+        mockCompanyList.add(new Company(2,"baidu", 500, new EmployeeRepository().getEmployees()));
+        mockCompanyList.add(new Company(3,"wangyiyun", 100, new EmployeeRepository().getEmployees()));
+        Mockito.when(mockCompanyRepository.getCompanies()).thenReturn(mockCompanyList);
+
+        mockMvc.perform(post("/companies")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\n" +
+                        "\t\"companyName\": \"kugou\",\n" +
+                        "\t\"employeesNumber\": 800,\n" +
+                        "\t\"employees\": []\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\n" +
+                        "    \"id\": 4,\n" +
                         "    \"companyName\": \"kugou\",\n" +
                         "    \"employeesNumber\": 800,\n" +
                         "    \"employees\": []\n" +

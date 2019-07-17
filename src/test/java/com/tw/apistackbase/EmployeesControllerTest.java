@@ -130,4 +130,31 @@ public class EmployeesControllerTest {
                         "    }\n" +
                         "]"));
     }
+
+    @Test
+    public void should_return_the_add_company_when_call_add_company_api() throws Exception {
+        mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(1, "zhangsan", 18, "male", 5000));
+        mockEmployeeList.add(new Employee(2, "lisi", 25, "female", 7000));
+        Mockito.when(mockEmployeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(post("/employees")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\n" +
+                        "    \"name\": \"xiaoming\",\n" +
+                        "    \"age\": 19,\n" +
+                        "    \"gender\": \"male\",\n" +
+                        "    \"salary\": 3000\n" +
+                        "}"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\n" +
+                        "    \"id\": 3,\n" +
+                        "    \"name\": \"xiaoming\",\n" +
+                        "    \"age\": 19,\n" +
+                        "    \"gender\": \"male\",\n" +
+                        "    \"salary\": 3000\n" +
+                        "}"));
+    }
 }

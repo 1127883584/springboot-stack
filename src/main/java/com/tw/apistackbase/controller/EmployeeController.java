@@ -2,6 +2,7 @@ package com.tw.apistackbase.controller;
 
 import com.tw.apistackbase.Employee;
 import com.tw.apistackbase.EmployeeRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +41,14 @@ public class EmployeeController {
                 .findFirst()
                 .orElse(null);
         return ResponseEntity.ok(employee);
+    }
+
+    @PostMapping("/employees")
+    public ResponseEntity createCompany(@RequestBody Employee employee) {
+        Employee employee1Temp = new Employee();
+        BeanUtils.copyProperties(employee, employee1Temp);
+        employee1Temp.setId(employeeRepository.getEmployees().size() + 1);
+        employeeRepository.getEmployees().add(employee1Temp);
+        return ResponseEntity.ok(employee1Temp);
     }
 }
