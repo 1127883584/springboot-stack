@@ -191,4 +191,26 @@ public class EmployeesControllerTest {
                         "}"));
     }
 
+    @Test
+    public void should_return_the_employees_when_delete_employee_by_id() throws Exception {
+        mockEmployeeRepository = Mockito.mock(EmployeeRepository.class);
+        List<Employee> mockEmployeeList = new ArrayList<>();
+        mockEmployeeList.add(new Employee(1, "zhangsan", 18, "male", 5000));
+        mockEmployeeList.add(new Employee(2, "lisi", 25, "female", 7000));
+        Mockito.when(mockEmployeeRepository.getEmployees()).thenReturn(mockEmployeeList);
+
+        mockMvc.perform(delete("/employees/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[\n" +
+                        "    {\n" +
+                        "        \"id\": 2,\n" +
+                        "        \"name\": \"lisi\",\n" +
+                        "        \"age\": 25,\n" +
+                        "        \"gender\": \"female\",\n" +
+                        "        \"salary\": 7000\n" +
+                        "    }\n" +
+                        "]"));
+    }
+
 }
